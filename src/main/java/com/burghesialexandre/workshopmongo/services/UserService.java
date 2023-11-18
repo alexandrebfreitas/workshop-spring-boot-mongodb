@@ -6,10 +6,15 @@ import java.util.Optional;
 import com.burghesialexandre.workshopmongo.dto.UserDTO;
 import com.burghesialexandre.workshopmongo.exception.ObjectNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.burghesialexandre.workshopmongo.domain.User;
 import com.burghesialexandre.workshopmongo.repository.UserRepository;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Service
 public class UserService {
@@ -32,5 +37,16 @@ public class UserService {
     public void delete(String id) {
         findById(id);
         repo.deleteById(id);
+    }
+
+
+    public User update(User obj) {
+        User newObj = findById(obj.getId());
+        updateData(newObj, obj);
+        return repo.save(newObj);
+    }
+    private void updateData(User newObj, User obj) {
+        newObj.setName(obj.getName());
+        newObj.setEmail(obj.getEmail());
     }
 }
